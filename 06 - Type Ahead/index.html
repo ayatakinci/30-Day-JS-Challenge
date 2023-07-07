@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="https://fav.farm/✅" />
+  </head>
+  <body>
+    <form class="search-form">
+      <input type="text" class="search" placeholder="City or State" />
+      <ul class="suggestions">
+        <li>Filter for a city</li>
+        <li>or a state</li>
+      </ul>
+    </form>
+    <script>
+      const endpoint =
+        "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
+
+      const cities = [];
+      fetch(endpoint)
+        .then((blob) => blob.json())
+        //blob is a parameter in the arrow function passed to the first .then() method. In this context, blob represents the response received from the fetch() function, which is typically a Response object.
+        //...data is the spread syntax in JavaScript, which allows an iterable (such as an array) to be expanded into individual elements. In this case, ...data is used to spread the elements of the data array into separate arguments for the push() method.
+        .then((data) => cities.push(...data));
+
+      function findMatches(wordToMatch, cities) {
+        return cities.filter((place) => {
+          // here we need to figure out if the city or state matches what was searched
+          //The RegExp constructor is used to create a regular expression object. Regular expressions are patterns used to match character combinations in strings.
+
+          //The first parameter passed to the RegExp constructor is wordToMatch, which represents the search term entered by the user. It is used as the pattern for the regular expression.
+
+          //The second parameter passed to the RegExp constructor is a string of flags that modify the behavior of the regular expression. In this case, 'gi' is used as the flags.
+
+          // 'g' stands for "global," which means the regular expression should match all occurrences of the pattern, rather than stopping at the first match.
+          //  'i' stands for "case-insensitive," which means the regular expression should match regardless of the case (uppercase or lowercase) of the characters.
+          const regex = new RegExp(wordToMatch, "gi");
+          return place.city.match(regex) || place.state.match(regex);
+        });
+      }
+
+      function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      function displayMatches() {
+        const matchArray = findMatches(this.value, cities);
+        const html = matchArray
+          .map((place) => {
+            const regex = new RegExp(this.value, "gi");
+            const cityName = place.city.replace(
+              regex,
+              `<span class="hl">${this.value}</span>`
+            );
+            const stateName = place.state.replace(
+              regex,
+              `<span class="hl">${this.value}</span>`
+            );
+            return `
+      <li>
+        <span class="name">${cityName}, ${stateName}</span>
+        <span class="population">${numberWithCommas(place.population)}</span>
+      </li>
+    `;
+          })
+          .join("");
+        suggestions.innerHTML = html;
+      }
+
+      const searchInput = document.querySelector(".search");
+      const suggestions = document.querySelector(".suggestions");
+
+      searchInput.addEventListener("change", displayMatches);
+      searchInput.addEventListener("keyup", displayMatches);
+    </script>
+  </body>
+</html>
