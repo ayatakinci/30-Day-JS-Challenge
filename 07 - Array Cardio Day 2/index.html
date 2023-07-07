@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Array Cardio 💪💪</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+  <p><em>Psst: have a look at the JavaScript Console</em> 💁</p>
+  <script>
+   let students = [
+  { name: "Alex", grade: 85, courses: ["math", "science"] },
+  { name: "Bill", grade: 90, courses: ["english", "science", "history"] },
+  { name: "Charlie", grade: 95, courses: ["math", "english"] },
+  { name: "Dana", grade: 87, courses: ["science", "history"] },
+  { name: "Ella", grade: 92, courses: ["math", "english", "history"] },
+  { name: "Frank", grade: 88, courses: ["english", "science"] },
+];
+// Filtering: Find all students who are taking math.
+let filteredArray1 = students.filter(student => student.courses = "math")
+console.log(filteredArray1)
+
+
+let filteredArray2 = students.map((student) =>{
+  return student.name
+} )
+console.log(filteredArray2)
+
+let filteredArray3 = students.sort((a, b)=>{
+  return a.grade-b.grade
+})
+console.log(filteredArray3)
+
+
+let filteredArray4 = students.find(student =>student.grade > 90)
+console.log(filteredArray4)
+
+
+let totalGrades = students.reduce((total, student) => total + student.grade, 0);
+let averageGrade = totalGrades / students.length;
+
+console.log(averageGrade);
+
+  </script>
+</body>
+</html>
